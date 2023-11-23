@@ -44,4 +44,10 @@ contract RaffleTest is Test{
         raffle.enterRaffle();
 
     }
+    function testRaffleRecordsPLayersWhenTheyEnter() public{
+        vm.prank(PLAYER);
+        raffle.enterRaffle{value: entranceFee}();
+        address playerRecorded = raffle.getPlayer(0);
+        assert(playerRecorded == PLAYER); 
+    }
 }
