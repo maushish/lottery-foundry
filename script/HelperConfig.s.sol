@@ -1,5 +1,6 @@
 //SPDX-License-Identifier: MIT
 
+pragma solidity ^0.8.18;
 import {Script} from "forge-std/Script.sol";
 
 
@@ -12,6 +13,7 @@ contract HelperConfig is Script{
         uint64 subscriptionId; 
         uint32 callbackGasLimit;
         address link;
+        uint256 key;
     }
     NetworkConfig public activeNetworkConfig;
 
@@ -29,7 +31,8 @@ contract HelperConfig is Script{
             keyHash:0x474e34a077df58807dbe9c96d3c009b23b3c6d0cce433e59bbf5b34f823bc56c,
             subscriptionId: 7050,
             callbackGasLimit: 200000,
-            link:0x779877A7B0D9E8603169DdbD7836e478b4624789
+            link:0x779877A7B0D9E8603169DdbD7836e478b4624789,
+            key:vm.envUint("PRIVATE_KEY")
         });
     }
     

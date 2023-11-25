@@ -78,6 +78,7 @@ contract Raffle is VRFConsumerBaseV2{
     /**Events */
     event EnteredRaffle(address indexed player);
     event WinnerPicked(address indexed winner);
+    event RequestRaffleWinner(uint256 indexed requestId);
 
     constructor(uint256 entranceFee,
                 uint256 interval,
@@ -150,6 +151,8 @@ contract Raffle is VRFConsumerBaseV2{
             i_callbackGasLimit,// to sure we don't overspend on gas BASICALLY LIMIT THE GAS AMT
             NUM_WORDS
         );
+        //even if this is redundant we are going to emit this event
+        emit RequestRaffleWinner(requestId);
     }
     /**
         * @dev this is the function that chainlink vrf node calls to send money to the random winner
@@ -191,4 +194,16 @@ contract Raffle is VRFConsumerBaseV2{
     function getPlayer(uint256 indexOfPlayer) external view returns(address) {
         return s_players[indexOfPlayer];
     }
+    function getRecentWinner() external view returns(address){
+        return s_recentWinner;
+        
+    }
+    function getLengthOfPlayers() external view returns(uint256){
+        return s_players.length;
+        
+    }
+    function getLastTimeStamp() external view returns(uint256){
+        return s_lastTimeStamp;
+    }
+    
 }

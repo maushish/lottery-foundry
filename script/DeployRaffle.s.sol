@@ -3,7 +3,7 @@ import {Script} from "forge-std/Script.sol";
 import {Raffle} from "../src/Raffle.sol";
 import {VRFCoordinatorV2Mock} from "@chainlink/contracts/src/v0.8/mocks/VRFCoordinatorV2Mock.sol";
 import {HelperConfig} from "./HelperConfig.s.sol";
-import {CreateSubscription} from "./Interactions.s.sol";
+import {CreateSubscription,FundSubscription, AddConsumer} from "./Interactions.s.sol";
 
 pragma solidity ^0.8.18;
 
@@ -20,9 +20,11 @@ contract DeployRaffle is Script{
         if(subscriptionId==0){
             //we are going to create a subscription
             CreateSubscription createSubscription= new CreateSubscription();
-            subscriptionId=createSubscription.createSubscriptionU(vrfCoordinator);
+            subscriptionId=createSubscription.createSubscription(vrfCoordinator);
             //fund it with link
-            
+            FundSubscription fundSubscription= new FundSubscription();
+            fundSubscription.fundSubscription(vrfCoordinator, subId, link);
+
         }
         
     
@@ -36,6 +38,8 @@ contract DeployRaffle is Script{
             callbackGasLimit
         );
         vm.stopBroadcast();
+        AddConsumer addConsumer= new AddConsumer();
+        addConsumer.addConsumer(address(vrfCoordinator), raffle, subId);
         return (raffle,helperConfig);
     }
 }
